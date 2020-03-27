@@ -1,0 +1,101 @@
+﻿@using SecurityNews.Models.UnitOfWork
+
+
+@inject SecurityNews.Models.UnitOfWork.IUnitOfWork  Context
+
+
+@{
+
+    var searchString = ViewBag.searchVal;
+    var modelImpact = Context.CategoryImpactRepositoryUW.Get();
+    var modelPlatform = Context.CategoryPlatformRepositoryUW.Get();
+}
+
+
+<div class="row" id="menu">
+
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+
+
+
+
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+
+                <a class="navbar-brand glyphicon glyphicon-home" href="~/Home/Index" id="mybrand"></a>
+            </div>
+
+
+
+
+
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">سطح تاثیر <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in modelImpact)
+                            {
+                                <li><a asp-controller="Home" asp-action="menuResultImpact" asp-route-id="@item.CategoryImpactId">@item.Title</a></li>
+                            }
+
+                        </ul>
+                    </li>
+
+
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">پلتفرم <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in modelPlatform)
+                            {
+                                <li><a asp-controller="Home" asp-action="menuResultPlatform" asp-route-id="@item.CategoryPlatformtId">@item.Title</a></li>
+                            }
+
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
+                    <li><a href="/Home/Show">لیست</a></li>
+
+                    <li><a href="/Home/ViewDEV">گزارش های نموداری</a></li>
+
+                    <li><a href="/Home/Spider">اسپایدر خبر US-CERT</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">امن افزار <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">درباره ما</a></li>
+                            <li><a href="#">ارتباط با ما</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+
+
+                <form class="navbar-form navbar-left hidden-sm" method="get" asp-controller="Home" asp-action="SearchResult">
+                    <div class="form-group">
+                        <input type="text" id="txtsearch" value="@searchString" name="txtsearch" class="form-control" placeholder="جستجو">
+                    </div>
+                    <button type="submit" class="btn btn-default">بگرد!</button>
+                </form>
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+</div>

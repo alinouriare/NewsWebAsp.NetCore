@@ -1,0 +1,33 @@
+﻿@using SecurityNews.PublicClass
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor http
+@inject SecurityNews.Models.UnitOfWork.IUnitOfWork _db
+@inject SecurityNews.Models.Services.IVisitRepository _ivisit
+
+@{
+    string remoteIpAddress = http.HttpContext.Connection.RemoteIpAddress.ToString();
+    string todayDate = DateAndTimeShamsi.DateShamsi().ToString();
+
+    var query = _db.VisitRepositoryUW.Get(v => v.IpAddress.Equals(remoteIpAddress) &&
+    v.DateTime.Equals(todayDate));
+
+    if (query.Count() == 0)
+    {
+        // امروز اولین بازدید است
+        VisitorHits hv = new VisitorHits();
+        hv.IpAddress = remoteIpAddress;
+        hv.DateTime = todayDate;
+        hv.VisitHit = 1;
+
+        _db.VisitRepositoryUW.Create(hv);
+        _db.Save();
+
+    }
+    else
+    {
+        //کاربر امروز بازدید داشته است
+        _ivisit.IncreasVisit(remoteIpAddress, todayDate);
+    }
+
+}

@@ -1,0 +1,131 @@
+﻿@model IEnumerable<SecurityNews.Models.News>
+
+<style>
+    .list-content-body figure {
+        float: right;
+        margin-left: 10px
+    }
+
+    #news-page-list { /*end*/
+        border-radius: 2px;
+        padding-top: 2px;
+        border: 1px solid rgb(200,200,200);
+        background-color: white;
+        padding-right: 5px;
+        padding-left: 3px;
+        margin-bottom: 10px;
+    }
+</style>
+@if (Model != null)
+{
+
+    <div id="news-page-list" class="widget widget-bordered title-a widget-page">
+        @if (ViewBag.searchVal != null)
+        {
+            <h2 style="font-size:16px; color:darkorange; margin:10px;">
+                نتايج جستجو براي عبارت "@ViewBag.searchVal"
+            </h2>
+            <hr class="hr" />
+        }
+
+        @if (ViewBag.menudesc != null)
+        {
+            <h2 style="font-size:16px; color:darkorange; margin:10px;">
+                @ViewBag.menudesc
+            </h2>
+            <hr class="hr" />
+        }
+
+
+
+        @foreach (var item in Model)
+        {
+            <article style="padding:5px;">
+                <section class="list-content-body">
+                    <div class="small text-left" style="float:left; position:relative; top:3px;">
+                        <span>
+                            <i class="glyphicon glyphicon-calendar"></i>
+                            <span>
+                                @item.NewsDate
+                            </span>
+                        </span>
+                        <span>
+                            <i class="glyphicon glyphicon-time"></i>
+                            <span>
+                                @item.NewsTime
+                            </span>
+                        </span>
+                        <span>
+                            <i class="glyphicon glyphicon-user"></i>
+                            <span>@item.VisitCount</span>
+                        </span>
+                    </div>
+                    <figure>
+                        <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId">
+                            <img alt="@item.Title" width="150" height="105" src="~/upload/indexImage/@item.IndexImage">
+                        </a>
+                    </figure>
+                    <div style="max-width:80%;">
+                        <h3 style="font-size:14px; font-weight:600;">
+                            <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId">
+                                @item.Abstract
+                            </a>
+                        </h3>
+                    </div>
+                    <summary>
+                        @item.Abstract
+                    </summary>
+                    <div class="clearfix"></div>
+                </section>
+            </article>
+
+            <hr style="margin:0;" />
+        }
+
+
+    @* Paging *@
+    @if (ViewBag.PageCount > 1)
+    {
+        <div class="row text-center">
+            <nav>
+                <ul class="pagination">
+                    @if ((int)ViewBag.PageID > 1)
+                    {
+                        @* Previous *@
+                        <li>
+                            <a href="SearchResult?txtsearch=@ViewBag.searchVal&page=@((int)ViewBag.PageID - 1)">
+                                <span>&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                    {
+                        <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                            <a href="SearchResult?txtsearch=@ViewBag.searchVal&page=@i">
+                                @i
+                                <span class="sr-only"></span>
+                            </a>
+                        </li>
+                    }
+                    @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                    {
+                        @* Next *@
+                        <li>
+                            <a href="SearchResult?txtsearch=@ViewBag.searchVal&page=@((int)ViewBag.PageID + 1)">
+                                <span>&raquo;</span>
+                            </a>
+                        </li>
+
+                    }
+                </ul>
+            </nav>
+        </div>
+
+    }
+    </div>
+}
+else
+
+{
+    <span class="text-danger col-md-12" style="font-size:18px; text-align:center;">جستجو نتيجه اي نداشت!!!</span>
+}

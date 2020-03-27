@@ -1,0 +1,31 @@
+﻿@model SecurityNews.Models.Comment
+
+@{
+    Layout = null;
+}
+<form asp-controller="Comment" asp-action="AcceptOrReject" method="post">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">@ViewBag.Title</h4>
+    </div>
+    @if (Model.status == true)
+    {
+        <div class="modal-body form-horizontal">
+            آیا از عدم تایید و نمایش ندادن نظر " @Model.Message " مطمئن هستید؟
+        </div>
+    }
+    else
+    {
+        <div class="modal-body form-horizontal">
+            آیا از تایید و نمایش نظر " @Model.Message " مطمئن هستید؟
+        </div>
+    }
+
+    <div class="modal-footer" style="text-align:left;">
+        <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            تایید
+        </button>
+    </div>
+
+</form>

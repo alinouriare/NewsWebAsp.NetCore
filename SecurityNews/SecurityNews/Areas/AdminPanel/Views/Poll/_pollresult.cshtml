@@ -1,0 +1,65 @@
+﻿@model SecurityNews.Models.Poll
+
+@inject SecurityNews.Models.UnitOfWork.IUnitOfWork  Context
+
+@{
+
+    var answerList = Context.PollOptionRepositoryUW.Get(t => t.PollID == Model.PollId);
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">نتیجه نظرسنجی</h4>
+</div>
+
+
+<style>
+    .chartClass {
+        width: 320px;
+        height: 320px;
+        margin: 0 auto;
+    }
+</style>
+
+
+<span style="margin-right:25px;">@Model.Question</span>
+<div class="hr"></div>
+
+<div id="pie-chart" class="chartClass"></div>
+
+
+<hr style="height:1px; color:gray;" />
+
+
+<span style="margin-right:20px; color:green">نمایش تعداد آرا به ازای هر پاسخ</span>
+@foreach (var item in answerList)
+{
+    <div style="margin-right:15px;">
+        @item.Answer : @item.VouteCount رای
+
+    </div>
+}
+
+<div class="modal-footer" style="text-align:left;">
+    <button class="btn btn-default" type="button" data-dismiss="modal">برگشت</button>
+</div>
+
+<div class="hidden" id="getListofAnswer">@ViewBag.getListofAnswer</div>
+
+@* chart *@
+<script>
+
+    var data = $('#getListofAnswer').text().split(",");
+    var dataObject = $.parseJSON(data);
+
+    var options = {
+        series: {
+            pie: { show: true }
+        },
+        legend: {
+            show: false
+        }
+    };
+
+    $.plot($("#pie-chart"), dataObject, options);
+</script>

@@ -1,0 +1,410 @@
+﻿@model dynamic
+
+<div id="daste-bandi">
+
+
+
+    <span class="header-lastnews">آخرین مطالب</span>
+
+    <div class="hr"></div>
+    <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+
+            <li role="presentation" class="active ul-title-color"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">آخرین اخبار</a></li>
+            <li role="presentation"><a href="#in" aria-controls="in" role="tab" data-toggle="tab" class="ul-title-color">داخلی</a></li>
+            <li role="presentation"><a href="#out" aria-controls="out" role="tab" data-toggle="tab" class="ul-title-color">خارجی</a></li>
+            <li role="presentation"><a href="#private" aria-controls="private" role="tab" data-toggle="tab">اختصاصی</a></li>
+
+
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane active" id="home">
+
+                <ul class="list-daste">
+
+
+
+                    @foreach (var item in Model.LastNews)
+                    {
+                        <li>
+                            <span class="badge">@item.NewsTime</span>
+
+
+
+                            @if (item.PlaceNewsID == 4)
+                            {
+                                <i class="fa fa-video-camera" aria-hidden="true"></i>
+                            }
+
+
+
+                            @if (item.CategoryPlatformID == 3)
+                            {
+                                <i class="fa fa-linux" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 2)
+                            {
+                                <i class="fa fa-apple" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 4)
+                            {
+                                <i class="fa fa-windows" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 7)
+                            {
+                                <i class="fa fa-android" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 8)
+                            {
+                                <i class="fa fa-gears" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 9)
+                            {
+                                <i class="fa fa-apple " aria-hidden="true"></i>
+                                <i class="fa  fa-mobile" aria-hidden="true"></i>
+                            }
+
+
+                            @switch (item.CategoryImpactID)
+                            {
+
+                                case 1:
+
+                                    <i class="fa fa-circle" style="color:red;" aria-hidden="true"></i>
+
+                                    break;
+
+                                case 7:
+
+                                    <i class="fa fa-circle" style="color:orange;" aria-hidden="true"></i>
+
+                                    break;
+                                case 8:
+
+                                    <i class="fa fa-circle" style="color:yellow;" aria-hidden="true"></i>
+                                    break;
+
+                                case 9:
+
+                                    <i class="fa fa-circle" style="color:dodgerblue;" aria-hidden="true"></i>
+                                    break;
+
+                                default:
+
+
+                                    break;
+                            }
+                            <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId" style="color:black;">@item.Title</a>
+                        </li>
+                    }
+
+
+                </ul>
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="in">
+                <ul class="list-daste">
+
+
+
+
+                    @foreach (var item in Model.InNews)
+                    {
+                        <li>
+                            <span class="badge">@item.NewsTime</span>
+
+
+                            @if (item.PlaceNewsID == 4)
+                            {
+                                <i class="fa fa-video-camera" aria-hidden="true"></i>
+                            }
+
+
+
+
+                            @if (item.CategoryPlatformID == 3)
+                            {
+                                <i class="fa fa-linux" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 2)
+                            {
+                                <i class="fa fa-apple" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 4)
+                            {
+                                <i class="fa fa-windows" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 7)
+                            {
+                                <i class="fa fa-android" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 8)
+                            {
+                                <i class="fa fa-gears" aria-hidden="true"></i>
+                            }
+                            @if (item.CategoryPlatformID == 9)
+                            {
+                                <i class="fa fa-apple " aria-hidden="true"></i>
+                                <i class="fa  fa-mobile" aria-hidden="true"></i>
+                            }
+
+
+
+
+
+                            @switch (item.CategoryImpactID)
+                            {
+
+                                case 1:
+
+                                    <i class="fa fa-circle" style="color:red;" aria-hidden="true"></i>
+
+                                    break;
+
+                                case 7:
+
+                                    <i class="fa fa-circle" style="color:orange;" aria-hidden="true"></i>
+
+                                    break;
+                                case 8:
+
+                                    <i class="fa fa-circle" style="color:yellow;" aria-hidden="true"></i>
+                                    break;
+
+                                case 9:
+
+                                    <i class="fa fa-circle" style="color:dodgerblue;" aria-hidden="true"></i>
+                                    break;
+
+                                default:
+
+
+                                    break;
+                            }
+                            <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId" style="color:black;">@item.Title</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="out">
+
+
+                <ul class="list-daste">
+
+
+
+
+                    @foreach (var item in Model.OutNews)
+                    {
+                        <li>
+                            <span class="badge">@item.NewsTime</span>
+
+
+
+
+                            @if (item.PlaceNewsID == 4)
+                            {
+                                <i class="fa fa-video-camera" aria-hidden="true"></i>
+                            }
+
+
+
+                            @if (item.CategoryPlatformID == 3)
+                            {
+                                <i class="fa fa-linux" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 2)
+                            {
+                                <i class="fa fa-apple" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 4)
+                            {
+                                <i class="fa fa-windows" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 7)
+                            {
+                                <i class="fa fa-android" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 8)
+                            {
+                                <i class="fa fa-gears" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 9)
+                            {
+                                <i class="fa fa-apple " aria-hidden="true"></i>
+                                <i class="fa  fa-mobile" aria-hidden="true"></i>
+                            }
+
+
+
+
+                            @switch (item.CategoryImpactID)
+                            {
+
+                                case 1:
+
+                                    <i class="fa fa-circle" style="color:red;" aria-hidden="true"></i>
+
+                                    break;
+
+                                case 7:
+
+                                    <i class="fa fa-circle" style="color:orange;" aria-hidden="true"></i>
+
+                                    break;
+                                case 8:
+
+                                    <i class="fa fa-circle" style="color:yellow;" aria-hidden="true"></i>
+                                    break;
+
+                                case 9:
+
+                                    <i class="fa fa-circle" style="color:dodgerblue;" aria-hidden="true"></i>
+                                    break;
+
+                                default:
+
+
+                                    break;
+                            }
+                            <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId" style="color:black;">@item.Title</a>
+                        </li>
+                    }
+                </ul>
+
+
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="private">
+
+
+
+                <ul class="list-daste">
+
+
+
+
+                    @foreach (var item in Model.PrivateNews)
+                    {
+                        <li>
+                            <span class="badge">@item.NewsTime</span>
+
+
+                            @if (item.PlaceNewsID == 4)
+                            {
+                                <i class="fa  fa-video-camera" aria-hidden="true"></i>
+                            }
+
+
+
+
+
+
+
+
+                            @if (item.CategoryPlatformID == 3)
+                            {
+                                <i class="fa fa-linux" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 2)
+                            {
+                                <i class="fa fa-apple" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 4)
+                            {
+                                <i class="fa fa-windows" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 7)
+                            {
+                                <i class="fa fa-android" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 8)
+                            {
+                                <i class="fa fa-gears" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 9)
+                            {
+                                <i class="fa fa-apple " aria-hidden="true"></i>
+                                <i class="fa  fa-mobile" aria-hidden="true"></i>
+                            }
+
+
+
+
+                            @switch (item.CategoryImpactID)
+                            {
+
+                                case 1:
+
+                                    <i class="fa fa-circle" style="color:red;" aria-hidden="true"></i>
+
+                                    break;
+
+                                case 7:
+
+                                    <i class="fa fa-circle" style="color:orange;" aria-hidden="true"></i>
+
+                                    break;
+                                case 8:
+
+                                    <i class="fa fa-circle" style="color:yellow;" aria-hidden="true"></i>
+                                    break;
+
+                                case 9:
+
+                                    <i class="fa fa-circle" style="color:dodgerblue;" aria-hidden="true"></i>
+                                    break;
+
+                                default:
+
+
+                                    break;
+                            }
+                            <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId" style="color:black;">@item.Title</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+</div>

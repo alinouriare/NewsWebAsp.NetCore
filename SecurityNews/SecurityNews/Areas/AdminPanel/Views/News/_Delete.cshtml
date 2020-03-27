@@ -1,0 +1,27 @@
+﻿@model SecurityNews.Models.News
+
+@{ 
+
+    Layout = null;
+}
+
+<form asp-controller="News" asp-action="Delete">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">حذف خبر</h4>
+
+    </div>
+    <div class="modal-body form-horizontal">
+        آیا از حذف دسته خبر @Model.Title مطمئن هستید؟
+
+    </div>
+
+    <div class="modal-footer" style="text-align:left;">
+        <button type="button" data-dismiss="modal" class="btn btn-default">برگشت</button>
+        <button class="btn btn-danger" type="submit">
+            حذف
+        </button>
+    </div>
+
+
+</form>

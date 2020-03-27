@@ -1,0 +1,136 @@
+﻿@model IEnumerable<SecurityNews.Models.SpiderModel.NewsSpider>
+
+
+
+@{
+    ViewData["Title"] = "اسپایدر";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!--Start Menu-->
+@Html.Partial("_menuPartial")
+<!--End Menu-->
+<style>
+
+    td {
+        vertical-align: middle !important;
+    }
+</style>
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray; padding-bottom:150px; padding-top:150px;">
+    <div class="panel panel-primary col-md-10  col-md-offset-1" style="margin-top:25px;  margin-bottom:25px;">
+
+
+        <div class="col-md-12">
+
+            <div class="col-md-6">
+
+                <form asp-controller="Home" asp-action="SpiderSS" method="post" class="form-horizontal" style="padding-top:10px;">
+                    <div class="row form-group">
+                        <div class="col-md-8">
+                            <input type="text" id="newssearchS" name="newssearchS" class="form-control"
+                                   placeholder="جستجوی اخبار" value="@ViewBag.searchString" />
+
+                        </div>
+
+
+                        <div class="input-group-btn col-md-2 @*pull-left*@">
+                            <button class="btn btn-default pull-right" type="submit">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+        </div>
+
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+
+        <table class="table  table-responsive text-center " style="overflow-x:scroll; margin-top:100px; margin-bottom:100px;">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;">
+
+
+                    <td>عنوان</td>
+                    <td>تاریخ</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+
+
+                        <td> <a asp-action="ShowSpider" asp-route-id="@item.IdNews">@item.Titel</a></td>
+                        <td>@item.NewsDate</td>
+
+
+
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a href="?newssearch=@ViewBag.searchString&page=@((int)ViewBag.PageID-1)">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a href="?newssearch=@ViewBag.searchString&page=@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a href="?newssearch=@ViewBag.searchString&page=@((int)ViewBag.PageID+1)">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+
+
+    </div>
+</div>
+<div class="container-fluid" style="  position:fixed;
+   left:0px;
+   bottom:0px;
+   height:95px;
+   width:100%;">
+    <!--start footer-->
+    @Html.Partial("_footerPartial")
+    <!--end footer-->
+</div>

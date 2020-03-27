@@ -1,0 +1,302 @@
+﻿@model SecurityNews.Models.News
+@using SecurityNews.Models.ViewModels
+@using System.Globalization
+
+@{
+
+    var currentDate = DateTime.Now;
+    PersianCalendar pcCalender = new PersianCalendar();
+    int year = pcCalender.GetYear(currentDate);
+    int month = pcCalender.GetMonth(currentDate);
+    int day = pcCalender.GetDayOfMonth(currentDate);
+
+
+
+
+    string Shamsidate = string.Format("{0:0000}/{1:00}/{2:00}", year, month, day);
+    string NowTime = string.Format("{0:hh:mm}", Convert.ToDateTime(pcCalender.GetHour(currentDate) + ":" + pcCalender.GetMinute(currentDate)));
+}
+@{
+
+    List<CategoryImpact> CategoryListImpact = ViewBag.CategoryListImpact;
+    List<CategoryPlatform> CategoryListPlatform = ViewBag.CategoryListPlatform;
+
+}
+
+@{
+
+    IndexPageSection IndexModel = new IndexPageSection();
+    List<IndexPageSection> IndexVm = IndexModel.GetPlaceInIndex();
+}
+
+<style>
+    .BorderElement {
+        border-radius: 3px;
+    }
+</style>
+
+
+<div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+
+    <div class="col-md-8 col-md-offset-2" style="margin-top:15px; margin-bottom:15px;">
+
+
+        <form asp-area="AdminPanel" asp-controller="News" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            @* عنوان خبر *@
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control circleInput BorderElement" placeholder="عنوان خبر را وارد نمایید" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+
+                <script src="~/ckeditor/ckeditor.js"></script>
+
+                <label asp-for="Content" class="control-label"></label>
+                <div>
+                    <textarea id="Content" name="Content" asp-for="Content" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <script>
+                    //CKEDITOR.replace('Content');
+                    const config = {
+                        filebrowserImageBrowseUrl: "/imagebrowser",
+                        filebrowserImageWindowWidth: 780,
+                        filebrowserImageWindowHeight: 720,
+                        filebrowserBrowseUrl: "/linkbrowser",
+                        filebrowserWindowWidth: 350,
+                        filebrowserWindowHeight: 500
+                    };
+                    const editor = document.getElementById("Content");
+                    CKEDITOR.replace(editor, config);
+
+                </script>
+
+
+            </div>
+
+
+
+
+            @* چکیده خبر *@
+            <div class="form-group">
+                <label asp-for="Abstract" class="control-label"></label>
+                <div>
+                    <textarea asp-for="Abstract" class="form-control BorderElement"></textarea>
+                    <span asp-validation-for="Abstract" class="text-danger"></span>
+                </div>
+            </div>
+
+            @* CVE *@
+            <div class="form-group">
+                <label asp-for="CVE" class="control-label"></label>
+                <div>
+                    <input asp-for="CVE" class="form-control BorderElement" />
+                    <span asp-validation-for="CVE" class="text-danger"></span>
+                </div>
+            </div>
+
+            @* Path*@
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <input asp-for="Path" class="form-control BorderElement circleInput" style="direction:ltr" placeholder="https://..." />
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+
+            @* تصویر شاخص *@
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="IndexImage" class="control-label"></label>
+                    <input asp-for="IndexImage" type="file" id="files" name="files" />
+                    <br />
+                    <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+
+
+                </div>
+                <span asp-validation-for="IndexImage" class="text-danger"></span>
+                <div class="col-md-4 col-md-offset-2">
+                    <div class="form-group">
+                        <img id="imgindex" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                             src="~/upload/indexImage/defaultpic.jpg" alt="UserImage"
+                             style="height:100px; width:90px; margin:5px auto;" />
+                    </div>
+
+                    <div id="divmessage" class="text-center hidden" style="color:green;">
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            @* دسته بندی موضوعات *@
+
+            <div class="form-group">
+                <label asp-for="CategoryImpactID" class="control-label"></label>
+                <select asp-for="CategoryImpactID" asp-items="@(new SelectList(CategoryListImpact,"CategoryImpactId","Title"))" class="form-control BorderElement"></select>
+
+
+
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="CategoryPlatformID" class="control-label"></label>
+                <select asp-for="CategoryPlatformID" asp-items="@(new SelectList(CategoryListPlatform,"CategoryPlatformtId","Title"))" class="form-control BorderElement"></select>
+
+
+
+            </div>
+
+
+            @* محل ارسال خبر *@
+            <div class="form-group">
+                <label asp-for="PlaceNewsID" class="control-label"></label>
+                <select asp-for="PlaceNewsID" asp-items="@(new SelectList(IndexVm,"ID","Title"))" class="form-control BorderElement"></select>
+
+
+
+            </div>
+
+            @* انتخاب نوع خبر *@
+            <div class="form-group">
+                <span style="font-weight:700; margin-left:50px;">نوع خبر :</span>
+                <label style="margin-left:45px;">
+                    داخلی
+                    <input type="radio" name="r1" value="1" class="minimal" checked>
+                </label>
+                <label style="margin-left:45px;">
+                    خارجی
+                    <input type="radio" name="r1" value="2" class="minimal">
+                </label>
+                <label>
+                    اختصاصی
+                    <input type="radio" name="r1" value="3" class="minimal">
+                </label>
+            </div>
+
+            @* متاتگ ها *@
+            <div class="form-group">
+                <label asp-for="MetaTag" class="control-label"></label>
+                <div>
+                    <textarea asp-for="MetaTag" class="form-control BorderElement"></textarea>
+                </div>
+            </div>
+
+            @* متای توضیحات *@
+            <div class="form-group">
+                <label asp-for="MetaDescription" class="control-label"></label>
+                <div>
+                    <textarea asp-for="MetaDescription" class="form-control BorderElement"></textarea>
+                </div>
+            </div>
+
+            @* تاریخ و زمان خبر *@
+
+            <div class="form-group" style="height:30px; margin-bottom:25px;">
+                <div style="font-size:15px;" class="col-md-6">
+                    <label asp-for="NewsDate" class="col-md-4 control-label"></label>
+                    <input asp-for="NewsDate" type="text" value="@Shamsidate" style="border:0px;" />
+                </div>
+
+                <div style="font-size:15px;" class="col-md-6">
+                    <label asp-for="NewsTime" class="col-md-4 control-label"></label>
+                    <input asp-for="NewsTime" type="text" value="@NowTime" style="border:0px;" />
+                </div>
+            </div>
+
+            <br />
+
+
+
+            @* 22تاریخ و زمان خبر *@
+
+            <div class="form-group" style="height:30px; margin-bottom:25px;">
+                <div style="font-size:15px;" class="col-md-6">
+                    <label asp-for="NewsDateEN" class="col-md-4 control-label"></label>
+                    <input asp-for="NewsDateEN" type="date" style="border:0px;" />
+                 
+                </div>
+
+
+            </div>
+            <br />
+
+            <div class="form-group">
+                <input type="submit" value="ایجاد" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+            </div>
+
+            <input type="text" class="hidden" id="IndexImage" name="IndexImage" />
+            <input type="text" class="hidden" id="userid" name="userid" value="@ViewBag.UserID" />
+
+        </form>
+
+        @if (ViewBag.SuccessMessage != "")
+        {
+            <span style="color:green;">
+                @ViewBag.SuccessMessage
+            </span>
+        }
+
+    </div>
+
+
+</div>
+
+
+@section PanelScripts{
+
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        })
+
+    </script>
+
+    <script>
+        var UploadImage = function () {
+            var data = new FormData;
+            var file = $("#files").get(0);
+            var files = file.files;
+
+            for (var i = 0; i < files.length; i++) {
+                data.append('files', files[i]);
+            }
+
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("UploadFile","News", new { area = "AdminPanel"})',
+                data: data,
+                contentType: false,
+                processData: false,
+            }).done(function (result) {
+                if (result.status == "success") {
+
+                    $("#imgindex").attr('src', "\\upload\\indexImage\\" + result.imagename);
+
+                    $("#divmessage").removeClass('hidden');
+                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
+
+                    $("#IndexImage").val(result.imagename);
+                    }
+                }).fail(function (result) {
+                    if (result.status != "success") {
+                        $("#divmessage").removeClass('hidden');
+                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                    }
+                });
+        }
+    </script>
+}
+

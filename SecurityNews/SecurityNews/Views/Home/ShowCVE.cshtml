@@ -1,0 +1,231 @@
+﻿@model IEnumerable<SecurityNews.Models.News>
+
+@using SecurityNews.Models.ViewModels
+@using SecurityNews.PublicClass
+
+@{
+    ViewData["Title"] = "نمایش";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+    <link href="~/NewFolder/css/fontawesome.min.css" rel="stylesheet" />
+
+</head>
+
+<!--Start Menu-->
+@Html.Partial("_menuPartial")
+<!--End Menu-->
+<style>
+
+    td {
+        vertical-align: middle !important;
+    }
+</style>
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray; padding-bottom:150px; padding-top:150px;">
+    <div class="panel panel-primary col-md-10  col-md-offset-1" style="margin-top:25px;  margin-bottom:25px;">
+
+
+        <div class="col-md-12">
+
+            <div class="col-md-6">
+
+                <form asp-controller="Home" asp-action="Show" method="post" class="form-horizontal" style="padding-top:10px;">
+                    <div class="row form-group">
+                        <div class="col-md-8">
+                            <input type="text" id="newssearch" name="newssearch" class="form-control"
+                                   placeholder="جستجوی اخبار" value="@ViewBag.searchString" />
+
+                        </div>
+
+
+                        <div class="input-group-btn col-md-2 @*pull-left*@">
+                            <button class="btn btn-default pull-right" type="submit">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-md-6">
+                <form asp-controller="Home" asp-action="ShowCVE" method="post" class="form-horizontal" style="padding-top:10px;">
+                    <div class="row form-group">
+                        <div class="col-md-8">
+                            <input type="text" id="newssearchCVE" name="newssearchCVE" class="form-control"
+                                   placeholder="جستجوی اخبار CVE" value="@ViewBag.searchStringCVE" />
+
+                        </div>
+
+
+                        <div class="input-group-btn col-md-2 @*pull-left*@">
+                            <button class="btn btn-default pull-right" type="submit">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+
+        <table class="table  table-responsive text-center " style="overflow-x:scroll;">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;">
+
+                    <td style="text-align:right;">@Html.DisplayNameFor(model => model.Title)</td>
+
+
+
+                    <td>@Html.DisplayNameFor(model => model.NewsDate)</td>
+                    <td>@Html.DisplayNameFor(model => model.NewsTime)</td>
+
+                    <td>@Html.DisplayNameFor(model => model.CVE)</td>
+                    <td>@Html.DisplayNameFor(model => model.Path)</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+
+                        <td style="text-align:right;">
+
+                            @switch (item.CategoryImpactID)
+                            {
+
+                                case 1:
+
+                                    <i class="fa fa-circle" style="color:red;" aria-hidden="true"></i>
+
+                                    break;
+
+                                case 7:
+
+                                    <i class="fa fa-circle" style="color:orange;" aria-hidden="true"></i>
+
+                                    break;
+                                case 8:
+
+                                    <i class="fa fa-circle" style="color:yellow;" aria-hidden="true"></i>
+                                    break;
+
+                                case 9:
+
+                                    <i class="fa fa-circle" style="color:dodgerblue;" aria-hidden="true"></i>
+                                    break;
+
+                                default:
+
+
+                                    break;
+                            }
+
+
+                            @if (item.CategoryPlatformID == 2)
+                            {
+                                <i class="fa fa-apple" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 4)
+                            {
+                                <i class="fa fa-windows" aria-hidden="true"></i>
+                            }
+
+
+                            @if (item.CategoryPlatformID == 7)
+                            {
+                                <i class="fa fa-android" aria-hidden="true"></i>
+                            }
+
+                            @if (item.CategoryPlatformID == 8)
+                            {
+                                <i class="fa fa-gears" aria-hidden="true"></i>
+                            }
+                            @if (item.CategoryPlatformID == 9)
+                            {
+                                <i class="fa fa-apple " aria-hidden="true"></i>
+                                <i class="fa  fa-mobile" aria-hidden="true"></i>
+                            }
+
+                            <a asp-controller="Home" asp-action="NewsDetails" asp-route-id="@item.NewsId">@item.Title</a>
+
+
+
+
+                        </td>
+                        <td>@item.tblCategoryImpact.Title</td>
+                        <td>@item.tblCategoryPlatform.Title</td>
+
+                        <td>@item.NewsDate</td>
+                        <td>@item.NewsTime</td>
+
+                        <td>@item.CVE</td>
+                        <td><a href="@item.Path"><i class="fa fa-download"></i></a></td>
+
+
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a href="?newssearch=@ViewBag.searchString&page=@((int)ViewBag.PageID-1)">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a href="?newssearch=@ViewBag.searchString&page=@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a href="?newssearch=@ViewBag.searchString&page=@((int)ViewBag.PageID+1)">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+
+
+    </div>
+</div>
+<div class="container-fluid"  style="  position:fixed;
+   left:0px;
+   bottom:0px;
+   height:95px;
+   width:100%;">
+    <!--start footer-->
+    @Html.Partial("_footerPartial")
+    <!--end footer-->
+</div>

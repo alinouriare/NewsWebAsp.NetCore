@@ -1,0 +1,152 @@
+﻿@model IEnumerable<SecurityNews.Models.Advertise>
+@using SecurityNews.Models.ViewModels
+@using SecurityNews.PublicClass
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUsers> signInManager
+
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+
+
+
+            <div>
+                <a class="btn btn-primary" asp-controller="Advertising" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    درج تبليغ
+                </a>
+
+            </div>
+
+
+
+
+
+        </div>
+        <hr style="height:1px; background-color:gray;" />
+        <table class="table table-responsive text-center">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;">
+                    <td>@Html.DisplayNameFor(model => model.FromDate)</td>
+                    <td>@Html.DisplayNameFor(model => model.ToDate)</td>
+                    <td>@Html.DisplayNameFor(model => model.gifPath)</td>
+                    <td>@Html.DisplayNameFor(model => model.Advlocation)</td>
+                    <td>@Html.DisplayNameFor(model => model.flag)</td>
+                    <td>عمليات</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.FromDate</td>
+                        <td>@item.ToDate</td>
+                        <td>
+                            <img src="~/upload/advImage/@item.gifPath" style="width:50px; height:60px;" />
+                        </td>
+
+                        @{
+                            List<AdvertisePlace> PlaceSections;
+                            var PlaceSection = new AdvertisePlace();
+                            PlaceSections = PlaceSection.AdvertiseDescription().Where(r => r.AdvId == item.Advlocation).ToList();
+
+                            <td>@PlaceSections[0].AdvLocationName</td>
+                        }
+
+                        @if (item.flag == 0)
+                        {
+                            <td style="color:green;">
+                                نمايش
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="color:red;">
+                                عدم نمايش
+                            </td>
+                        }
+                        <td>
+
+
+                            <a class="btn btn-danger" asp-controller="Advertising" asp-action="Delete"
+                               asp-route-id="@item.AdId" data-toggle="modal" data-target="#modal-action-advertiseDelete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                حذف
+                            </a>
+
+
+
+                                <a class="btn btn-warning" asp-controller="Advertising" asp-action="ChangeStatus"
+                                   asp-route-id="@item.AdId" data-toggle="modal" data-target="#modal-action-advertiseChange">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    وضعيت
+                                </a>
+                       
+
+
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a asp-controller="Advertising" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID - 1)">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a asp-controller="Advertising" asp-action="Index" asp-route-page="@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a asp-controller="Advertising" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID + 1)">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-advertiseDelete", Size = ModalSize.Medium })
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-advertiseChange", Size = ModalSize.Medium })
+
+@section PanelScripts{
+
+    @*<script src="~/js/modal-js/adverse-index.js"></script>*@
+    <script src="~/js/modal-js/advertiseChange-Index.js"></script>
+    <script src="~/js/modal-js/advertiseDelete-Index.js"></script>
+}

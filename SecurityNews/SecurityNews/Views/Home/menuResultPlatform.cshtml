@@ -1,0 +1,28 @@
+﻿@model SecurityNews.Models.ViewModels.IndexPageSection.IndexModel
+
+
+<div id="container" class="container-fluid" style="background-color: white; padding-top:50px;">
+
+    <!--Start Header-->
+    @*@Html.Partial("_headerPartial", Model.Adv.Where(a => a.Advlocation == 1))*@
+    <!--End Header-->
+    <!--Start Menu-->
+    @Html.Partial("_menuPartial")
+    <!--End Menu-->
+    <!--Start Content-->
+    <div class="row" id="content">
+        <div id="content-body" class="container">
+            <div class="col-lg-10 col-md-10 col-xs-12 col-sm-12">
+                @Html.Partial("_menu", Model.searchmodel)
+            </div>
+            <!--پایان محتوا-->
+            <!--پایان دسته بندی-->
+            <!--start tabligh-->
+            @*@Html.Partial("_tablighPartial", Model.Adv)*@
+            <!--end tabligh-->
+        </div>
+    </div>
+    <!--End Content-->
+
+
+</div>

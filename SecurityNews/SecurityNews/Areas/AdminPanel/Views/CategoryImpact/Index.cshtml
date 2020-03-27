@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SecurityNews.Models.CategoryImpact>
+
+@using SecurityNews.PublicClass
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-8 col-md-offset-2" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="CategoryImpact" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن دسته بندی جدید
+                </a>
+            </div>
+        </div>
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <table class="table table-responsive text-center">
+            <thead>
+                <tr>
+
+
+                    <td>@Html.DisplayNameFor(model => model.Title)</td>
+                    <td>@Html.DisplayNameFor(model => model.Description)</td>
+                    <td>عملیات</td>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Description</td>
+
+                        <td>
+
+                            <a class="btn btn-info" asp-controller="CategoryImpact" asp-action="Edit" asp-route-id="@item.CategoryImpactId">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                ویرایش
+                            </a>
+
+                            <a class="btn btn-danger" asp-controller="CategoryImpact" asp-action="Delete" asp-route-id="@item.CategoryImpactId"
+                               data-toggle="modal" data-target="#modal-action-CategoryImpact">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                حذف
+                            </a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-CategoryImpact", Size = ModalSize.Medium })
+
+@section PanelScripts{
+
+
+    <script src="~/js/modal-js/categoryImpact-index.js"></script>
+}

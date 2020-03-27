@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="گزارش اخبار" />
+  <DataSources>
+    <SqlDataSource Name="News_Tbl" ComponentName="sqlDataSource1">
+      <Connection Name="MyConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="News_Tbl">
+        <Tables>
+          <Table Name="News_Tbl" />
+          <Table Name="CategoryPlatform_Tbl" />
+          <Table Name="CategoryImpact_Tbl" />
+          <Relation Type="Inner" Parent="News_Tbl" Nested="CategoryPlatform_Tbl">
+            <KeyColumn Parent="CategoryPlatformID" Nested="CategoryPlatformtId" />
+          </Relation>
+          <Relation Type="Inner" Parent="News_Tbl" Nested="CategoryImpact_Tbl">
+            <KeyColumn Parent="CategoryImpactID" Nested="CategoryImpactId" />
+          </Relation>
+        </Tables>
+        <Columns>
+          <Column Table="News_Tbl" Name="NewsId" />
+          <Column Table="News_Tbl" Name="Abstract" />
+          <Column Table="News_Tbl" Name="CVE" />
+          <Column Table="News_Tbl" Name="CategoryImpactID" />
+          <Column Table="News_Tbl" Name="CategoryPlatformID" />
+          <Column Table="News_Tbl" Name="Content" />
+          <Column Table="News_Tbl" Name="IndexImage" />
+          <Column Table="News_Tbl" Name="NewsDate" />
+          <Column Table="News_Tbl" Name="NewsTime" />
+          <Column Table="News_Tbl" Name="Title" />
+          <Column Table="News_Tbl" Name="UserID" />
+          <Column Table="News_Tbl" Name="VisitCount" />
+          <Column Table="News_Tbl" Name="PlaceNewsID" />
+          <Column Table="News_Tbl" Name="NewsType" />
+          <Column Table="News_Tbl" Name="MetaDescription" />
+          <Column Table="News_Tbl" Name="MetaTag" />
+          <Column Table="News_Tbl" Name="Path" />
+          <Column Table="News_Tbl" Name="NewsDateEN" />
+          <Column Table="CategoryPlatform_Tbl" Name="CategoryPlatformtId" />
+          <Column Table="CategoryPlatform_Tbl" Name="Description" />
+          <Column Table="CategoryPlatform_Tbl" Name="Title" Alias="CategoryPlatform_Tbl_Title" />
+          <Column Table="CategoryImpact_Tbl" Name="CategoryImpactId" />
+          <Column Table="CategoryImpact_Tbl" Name="Description" Alias="CategoryImpact_Tbl_Description" />
+          <Column Table="CategoryImpact_Tbl" Name="Title" Alias="CategoryImpact_Tbl_Title" />
+        </Columns>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Pie ComponentName="pieDashboardItem1" Name="نمودار سطح تاثیر" DataSource="sqlDataSource1" DataMember="News_Tbl">
+      <DataItems>
+        <Measure DataMember="NewsId" Name="مجموع تعداد" SummaryType="Count" DefaultId="DataItem0" />
+        <Dimension DataMember="CategoryImpact_Tbl_Title" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <TreeView ComponentName="treeViewDashboardItem1" Name="لیست سطح تاثیر" DataSource="sqlDataSource1" DataMember="News_Tbl">
+      <DataItems>
+        <Dimension DataMember="CategoryImpact_Tbl_Title" DefaultId="DataItem0" />
+        <Dimension DataMember="NewsId" DefaultId="DataItem1" />
+      </DataItems>
+      <HiddenDimensions>
+        <Dimension DefaultId="DataItem1" />
+      </HiddenDimensions>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </TreeView>
+    <TreeView ComponentName="treeViewDashboardItem2" Name="لیست پلتفرم" DataSource="sqlDataSource1" DataMember="News_Tbl">
+      <DataItems>
+        <Dimension DataMember="CategoryPlatform_Tbl_Title" DefaultId="DataItem0" />
+        <Dimension DataMember="NewsId" DefaultId="DataItem1" />
+      </DataItems>
+      <HiddenDimensions>
+        <Dimension DefaultId="DataItem1" />
+      </HiddenDimensions>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </TreeView>
+    <Pie ComponentName="pieDashboardItem2" Name="نمودار پلتفرم" DataSource="sqlDataSource1" DataMember="News_Tbl">
+      <DataItems>
+        <Measure DataMember="NewsId" Name="مجموع تعداد" SummaryType="Count" DefaultId="DataItem0" />
+        <Dimension DataMember="CategoryPlatform_Tbl_Title" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pie ComponentName="pieDashboardItem3" Name="گزارش تاریخ" DataSource="sqlDataSource1" DataMember="News_Tbl">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Measure DataMember="NewsId" Name="مجموع تعداد" SummaryType="Count" DefaultId="DataItem0" />
+        <Dimension DataMember="NewsDateEN" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup>
+        <LayoutGroup Orientation="Vertical">
+          <LayoutGroup>
+            <LayoutItem DashboardItem="treeViewDashboardItem1" />
+            <LayoutItem DashboardItem="treeViewDashboardItem2" />
+          </LayoutGroup>
+          <LayoutGroup>
+            <LayoutItem DashboardItem="pieDashboardItem1" />
+            <LayoutItem DashboardItem="pieDashboardItem2" />
+          </LayoutGroup>
+        </LayoutGroup>
+        <LayoutItem DashboardItem="pieDashboardItem3" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

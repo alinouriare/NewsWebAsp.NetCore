@@ -1,0 +1,101 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUsers> _userManager
+@inject IHttpContextAccessor _hc
+
+
+@{ 
+
+    var user = await _userManager.GetUserAsync(_hc.HttpContext.User);
+}
+
+<aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel">
+            <div class="pull-right image">
+                <img src="~/upload/userimage/normalimage/@user.UserImagePath" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-right info">
+                <p>@user.Name @user.Family</p>
+                <!-- Status -->
+                <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
+            </div>
+        </div>
+
+        <!-- search form (Optional) -->
+
+
+
+        @*<form asp-controller="News" asp-action="Index" method="post" class="form-horizontal">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <input type="text" id="newssearch" name="newssearch" class="form-control"
+                           placeholder="جستجوی اخبار" value="@ViewBag.searchString" />
+
+                </div>
+
+                <div class="input-group-btn col-md-2 pull-left">
+                    <button class="btn btn-default pull-right" type="submit">جستجو</button>
+                </div>
+            </div>
+        </form>*@
+
+
+
+
+
+
+
+
+
+
+
+
+        <form asp-controller="News" asp-action="Index" method="post" class="sidebar-form">
+                            <div class="input-group">
+                    <input type="text" id="newssearch" name="newssearch" class="form-control"
+                           placeholder="جستجوی اخبار" value="@ViewBag.searchString">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">امکانات سیستم</li>
+                <!-- Optionally, you can add icons to the links -->
+                @*<li class="active"><a asp-controller="CategoryImpact" asp-action="Index"><i class="fa fa-link"></i> <span>دسته بندی تاثیر </span></a></li>
+                <li ><a asp-controller="CategoryPlatform" asp-action="Index"><i class="fa fa-link"></i> <span>دسته بندی پلتفرم </span></a></li>*@
+                <li><a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> <span>پیشخوان</span></a></li>
+                <li class="active"><a asp-controller="News" asp-action="Index"><i class="fa fa-hacker-news"></i> <span>مدیریت اخبار</span></a></li>
+                <li><a asp-controller="Advertising" asp-action="Index"><i class="fa fa-adn"></i> <span>تبلیغات</span></a></li>
+                <li><a asp-controller="Comment" asp-action="Index"><i class="fa fa-comment"></i> <span>نظرات</span></a></li>
+                <li><a asp-controller="User" asp-action="Index"><i class="fa fa-user"></i> <span>نویسندگان</span></a></li>
+                <li><a asp-controller="Poll" asp-action="Index"><i class="fa fa-users"></i> <span>نظرسنجی</span></a></li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-link"></i> <span>مدیریت سیستم</span>
+                        <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a asp-controller="Role" asp-action="Index">دسترسیها</a></li>
+                        <li><a asp-controller="CategoryImpact" asp-action="Index">مدیریت دسته تاثیر</a></li>
+                        <li><a asp-controller="CategoryPlatform" asp-action="Index">مدیریت دسته پلتفرم</a></li>
+                        <li><a asp-controller="SiteSetting" asp-action="Index">تنظیمات سایت</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+</aside>

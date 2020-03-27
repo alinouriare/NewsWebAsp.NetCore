@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SecurityNews.Models.CategoryPlatform>
+@using SecurityNews.PublicClass
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-8 col-md-offset-2" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="CategoryPlatform" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن دسته بندی جدید
+                </a>
+            </div>
+        </div>
+
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <table class="table table-responsive text-center">
+            <thead>
+                <tr>
+
+
+                    <td>@Html.DisplayNameFor(model => model.Title)</td>
+                    <td>@Html.DisplayNameFor(model => model.Description)</td>
+                    <td>عملیات</td>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Description</td>
+
+                        <td>
+
+                            <a class="btn btn-info" asp-controller="CategoryPlatform" asp-action="Edit" asp-route-id="@item.CategoryPlatformtId">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                ویرایش
+                            </a>
+
+                            <a class="btn btn-danger" asp-controller="CategoryPlatform" asp-action="Delete" asp-route-id="@item.CategoryPlatformtId"
+                               data-toggle="modal" data-target="#modal-action-CategoryPlatform">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                حذف
+                            </a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a asp-controller="CategoryImpact" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID) - 1">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a asp-controller="CategoryImpact" asp-action="Index" asp-route-page="@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a asp-controller="CategoryImpact" asp-action="Index" asp-route-Page="@((int)ViewBag.PageID) + 1">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-CategoryPlatform", Size = ModalSize.Medium })
+
+@section PanelScripts{
+
+
+    <script src="~/js/modal-js/categoryPlatform-index.js"></script>
+}

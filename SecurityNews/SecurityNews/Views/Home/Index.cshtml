@@ -1,0 +1,231 @@
+﻿@model SecurityNews.Models.ViewModels.IndexPageSection.IndexModel
+@{
+
+
+
+
+    List<Advertise> adv1 = Model.Adv.Where(a => a.Advlocation == 2).ToList();
+    List<Advertise> adv2 = Model.Adv.Where(a => a.Advlocation == 3).ToList();
+    List<Advertise> adv3 = Model.Adv.Where(a => a.Advlocation == 4).ToList();
+}
+
+
+<div id="container" class="container-fluid" style="background-color: white;">
+
+
+    @*<div class="navbar navbar-default navbar-fixed-top " style="height:10px;">
+            <!--Start Header-->
+            @Html.Partial("_headerPartial")
+            <!--End Header-->
+
+        </div>*@
+
+
+    <!--Start Menu-->
+    @Html.Partial("_menuPartial")
+    <!--End Menu-->
+
+
+    <br />
+    <br />
+
+    <!--Start Content-->
+    <div class="row" id="content">
+        <div id="content-body" class="container">
+            <div class="col-lg-7 col-md-7 col-xs-12 col-sm-12">
+                <!--Start Slider-->
+                @Html.Partial("_sliderPartial", Model.SliderNews)
+                <!--End Slider-->
+                <!--تبلیغ زیر اسلایدر-->
+                @if (adv1.Count > 0)
+                {
+                    <div>
+                        <a href="@adv1[0].Link">
+                            <img src="~/upload/advImage/@adv1[0].gifPath" class="adverse-mainSlide-buttom" />
+                        </a>
+                    </div>
+
+                }
+
+                <!--start special news-->
+                @Html.Partial("_specialNewsPartial", Model.SpecialNews)
+                <!--End special news-->
+                <!--تبلیغ زیر اخبار ویژه-->
+                @if (adv2.Count > 0)
+                {
+                    <div>
+                        <a href="@adv2[0].Link">
+                            <img src="~/upload/advImage/@adv2[0].gifPath" class="adverse-mainSlide-buttom" />
+                        </a>
+                    </div>
+
+                }
+
+
+
+                <!-- start last video -->
+                @Html.Partial("_lastVideoPartial", Model.LastVideo)
+                <!-- End last video -->
+                <!--تبلیغ زیر آخرین ویدیوها-->
+                @if (adv3.Count > 0)
+                {
+                    <div>
+                        <a href="@adv3[0].Link">
+                            <img src="~/upload/advImage/@adv3[0].gifPath" class="adverse-mainSlide-buttom" />
+                        </a>
+                    </div>
+
+                }
+            </div>
+            <!--پایان محتوا-->
+
+
+            <div id="second-part" class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
+
+                <!--Start Daste-bandi-->
+                @Html.Partial("_dastebandiPartial")
+                <!--End Daste-bandi-->
+                <!--start roozname-->
+                @*@Html.Partial("_rooznamePartial")*@
+                <!--end roozname-->
+
+                @if (Model.PollModel != null)
+                {
+                    <!-- نظر سنجی -->
+                    @Html.Partial("_nazarsanjiPartial", Model.PollModel)
+                    <!-- پایان نظر سنجی -->
+
+                }
+
+
+
+                <!--start login-->
+                @Html.Partial("_loginPartial", Model.loginVM)
+                <!--End Login-->
+
+
+            </div>
+            <!--پایان دسته بندی-->
+            <!--start tabligh-->
+            @Html.Partial("_tablighPartial", Model.Adv)
+            <!--end tabligh-->
+
+            <div class="hidden" id="getListofAnswer">@ViewBag.getListofAnswer</div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+</div>
+<div class="container-fluid">
+    <!--start footer-->
+    @Html.Partial("_footerPartial")
+    <!--end footer-->
+</div>
+
+
+@section Scripts{
+
+<script src="~/js/chart/jquery.flot.js"></script>
+<script src="~/js/chart/jquery.flot.pie.js"></script>
+
+    <script>
+        $('#frmLogin').submit(function (e) {
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "Post",
+                url: url,
+                data: form.serialize(),
+
+                success: function (msg) {
+
+                    if (msg.status === 'success') {
+                        window.location.href = '/AdminPanel/Home';
+                    }
+                    else if (msg.status === 'fail') {
+                        $('#spanerror').text('اطلاعات ورود اشتباه است');
+
+                    }
+                    else if (msg.status === 'fail2') {
+                        $('#spanerror').text('نام کاربری یا رمز عبور وارد نشده است')
+
+                    }
+
+                }
+            });
+
+            e.preventDefault();
+        });
+    </script>
+
+
+
+
+    <script>
+        $('#btnpolling').on('click', function (e) {
+            e.preventDefault();
+
+            var answerid = $('input[name=r1]:checked').attr('id');
+            var pollid = $('#getpollid').text();
+
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("setVote","Home")',
+                data: { answerid: answerid, pollid: pollid },
+                success: function (msg) {
+                    if (msg.status == 'success') {
+                        $('#nazarsanji').html('از اینکه در نظرسنجی شرکت کردید متشکریم');
+                    }
+                }
+            }).done(function (msg) {
+                if (msg.status == 'fail') {
+                    alert('لطفا برای شرکت در نظرسنجی یکی از گزینه ها را انتخاب نمایید');
+
+                }
+            });
+        });
+    </script>
+
+
+
+
+    @* chart *@
+    <script>
+
+        var data = $('#getListofAnswer').text().split(",");
+        var dataObject = $.parseJSON(data);
+
+        var options = {
+            series: {
+                pie: { show: true }
+            },
+            legend: {
+                show: false
+            }
+        };
+
+        $.plot($("#pie-chart"), dataObject, options);
+    </script>
+
+
+
+
+
+
+
+
+
+
+    <script>
+        $('#myTabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
+}

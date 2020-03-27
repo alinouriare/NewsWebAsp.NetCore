@@ -1,0 +1,154 @@
+﻿@model IEnumerable<SecurityNews.Models.Comment>
+@using SecurityNews.PublicClass
+
+<link href="~/persiandatepicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-12" style="margin:5px auto;">
+
+        <form method="post" asp-controller="Comment" asp-action="Index" class="form-horizontal center-block" style="margin-top:15px; margin-bottom:15px;">
+            <div class="row form-group" style="margin:0 auto;">
+
+                @*@* از تاريخ *@
+                <div class="input-group col-md-3 col-sm-12 pull-right" style="margin-left:15px;">
+                    <div class="input-group-addon" data-MdDateTimePicker="true" data-trigger="click" data-targetselector="#fromDate" data-groupid="group1" data-fromdate="true" data-enabletimepicker="false" data-placement="left">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                    <input value="@ViewBag.from" type="text" class="form-control" id="fromDate" name="fromDate" placeholder="از تاريخ" data-MdDateTimePicker="true" data-trigger="click" data-targetselector="#fromDate" data-groupid="group1" data-fromdate="true" data-enabletimepicker="false" data-placement="right" />
+                </div>
+
+                @* تا تاريخ *@
+                <div class="input-group col-md-3 col-sm-12 pull-right" style="margin-left:15px;">
+                    <div class="input-group-addon" data-MdDateTimePicker="true" data-trigger="click" data-targetselector="#todate">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                    <input value="@ViewBag.to" type="text" class="form-control" id="todate" name="todate" placeholder="تا تاريخ" data-MdDateTimePicker="true" data-placement="right" />
+                </div>
+
+                <div class="group-btn col-md-2 pull-left">
+                    <button class="btn btn-default pull-right" type="submit">جستجو</button>
+                </div>
+            </div>
+        </form>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive">
+                <thead>
+                    <tr style="font-size:12px; font-weight:600;">
+                        <td style="width:110px;">@Html.DisplayNameFor(model => model.FullName)</td>
+                        <td style="width:100px;">@Html.DisplayNameFor(model => model.Email)</td>
+                        <td style="width:100px;">@Html.DisplayNameFor(model => model.IP)</td>
+                        <td style="width:95px;">@Html.DisplayNameFor(model => model.commentDate)</td>
+                        <td style="width:95px;">@Html.DisplayNameFor(model => model.commentTime)</td>
+                        <td style="width:150px;">@Html.DisplayNameFor(model => model.TblNews.Title)</td>
+                        <td style="width:100px;">@Html.DisplayNameFor(model => model.status)</td>
+                        <td>@Html.DisplayNameFor(model => model.Message)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="font-size:12px;">
+                            <td>@item.FullName</td>
+                            <td>@item.Email</td>
+                            <td>@item.IP</td>
+                            <td>@item.commentDate</td>
+                            <td>@item.commentTime</td>
+                            <td>@item.TblNews.Title</td>
+
+
+                            @if (item.status == true)
+                            {
+                                <td style="color:green;">تایید شده</td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">تایید نشده</td>
+                            }
+
+                            <td>@item.Message</td>
+                            <td>
+                                <a class="" asp-controller="Comment" asp-action="AcceptOrReject" asp-route-id="@item.Id"
+                                   data-toggle="modal" data-target="#modal-action-comment">
+                                    @if (item.status == true)
+                                    {
+                                        <i class="glyphicon glyphicon-remove" style="color:orange;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="glyphicon glyphicon-ok" style="color:green;"></i>
+                                    }
+                                </a>
+
+                                <a asp-controller="Comment" asp-action="Delete" style="margin-right:8px;"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-comment">
+                                    <i class="glyphicon glyphicon-trash" style="color:red;"></i>
+
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+
+        </div>
+
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a href="?fromdate=@ViewBag.from&todate=@ViewBag.to&page=@((int)ViewBag.PageID - 1)">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a href="?fromdate=@ViewBag.from&todate=@ViewBag.to&page=@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a href="?fromdate=@ViewBag.from&todate=@ViewBag.to&page=@((int)ViewBag.PageID + 1)">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+
+
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-comment", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+    <script src="~/js/modal-js/comment-index.js"></script>
+    <script src="~/persiandatepicker/calendar.js"></script>
+    <script src="~/persiandatepicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+}

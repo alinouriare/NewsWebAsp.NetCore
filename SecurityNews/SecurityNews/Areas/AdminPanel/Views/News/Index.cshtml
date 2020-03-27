@@ -1,0 +1,144 @@
+﻿@model IEnumerable<SecurityNews.Models.News>
+@using SecurityNews.Models.ViewModels
+@using SecurityNews.PublicClass
+
+<style>
+
+    td {
+        vertical-align: middle !important;
+    }
+</style>
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="News" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    درج خبر جدید
+                </a>
+            </div>
+        </div>
+
+
+        <form asp-controller="News" asp-action="Index" method="post" class="form-horizontal">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <input type="text" id="newssearch" name="newssearch" class="form-control"
+                           placeholder="جستجوی اخبار" value="@ViewBag.searchString" />
+
+                </div>
+
+                <div class="input-group-btn col-md-2 pull-left">
+                    <button class="btn btn-default pull-right" type="submit">جستجو</button>
+                </div>
+            </div>
+        </form>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <table class="table table-responsive text-center">
+            <thead>
+                <tr style="font-size:15px; font-weight:600;">
+                    <td>@Html.DisplayNameFor(model => model.Title)</td>
+                    <td>@Html.DisplayNameFor(model => model.VisitCount)</td>
+                    <td>@Html.DisplayNameFor(model => model.NewsDate)</td>
+                    <td>@Html.DisplayNameFor(model => model.NewsTime)</td>
+                    <td>@Html.DisplayNameFor(model => model.CategoryImpactID)</td>
+                    <td>@Html.DisplayNameFor(model => model.PlaceNewsID)</td>
+                    <td>@Html.DisplayNameFor(model => model.IndexImage)</td>
+                    <td>عملیات</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.VisitCount</td>
+                        <td>@item.NewsDate</td>
+                        <td>@item.NewsTime</td>
+                        <td>@item.tblCategoryImpact.Title</td>
+
+                        @{
+                            List<IndexPageSection> PlaceSections;
+                            var PlaceSection = new IndexPageSection();
+                            PlaceSections = PlaceSection.GetPlaceInIndex().Where(r => r.ID == item.PlaceNewsID).ToList();
+
+                            <td>@PlaceSections[0].Title</td>
+                        }
+
+
+                        <td>
+                            <img style="height:55px; width:50px;" src="~/upload/indexImage/@item.IndexImage" />
+                        </td>
+                        <td>
+                            <a class="btn btn-info" asp-controller="News" asp-action="Edit" asp-route-id="@item.NewsId" style="width:80px;">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                ویرایش
+                            </a>
+                            <br />
+                            <br />
+                            <a class="btn btn-danger" asp-controller="News" asp-action="Delete"
+                               asp-route-id="@item.NewsId" data-toggle="modal" data-target="#modal-action-news" style="width:80px;">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                حذف
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @* Paging *@
+        @if (ViewBag.PageCount > 1)
+        {
+            <div class="row text-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ((int)ViewBag.PageID > 1)
+                        {
+                            @* Previous *@
+                            <li>
+                                <a href="?newssearch=@ViewBag.searchString&page=@((int)ViewBag.PageID-1)">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= (ViewBag.PageCount); i++)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?" active":"")">
+                                <a href="?newssearch=@ViewBag.searchString&page=@i">
+                                    @i
+                                    <span class="sr-only"></span>
+                                </a>
+                            </li>
+                        }
+                        @if ((int)ViewBag.PageID <= (int)ViewBag.PageCount - 1)
+                        {
+                            @* Next *@
+                            <li>
+                                <a href="?newssearch=@ViewBag.searchString&page=@((int)ViewBag.PageID+1)">
+                                    <span>&raquo;</span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
+
+
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-news", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+    <script src="~/js/modal-js/news-index.js"></script>
+}

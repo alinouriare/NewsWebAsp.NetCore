@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+<!-- Add the following namespace usages: -->
+@using DevExpress.AspNetCore
+@using DevExpress.DashboardWeb
+@using DevExpress.DashboardAspNetCore
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" href="~/upload/hm.png" type="image/png">
+    <!-- BootStrap -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <!--rtl BootStrap -->
+    <link href="~/css/bootstrap-rtl.css" rel="stylesheet" />
+    <link href="~/css/StyleSheet-index.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/adminpanelfiles/bowercomponents/font-awesome/css/font-awesome.min.css">
+    <!-- Attach the Dashboard's stylesheets. -->
+    @Html.DevExpress().StyleSheets(config => config.AddDashboard(cssSettings => cssSettings.ColorScheme("light")))
+</head>
+<body>
+
+
+    <!--Start Menu-->
+    @Html.Partial("_menuPartial")
+    <!--End Menu-->
+    <!-- Add the Web Dashboard with the "clientDashboardControl1" name to a View, specify its size, and set the Working Mode to Designer. -->
+    <div style="position: absolute; left:0;top:30px;right:0;bottom:0;">
+        @(Html.DevExpress().Dashboard("clientDashboardControl1")
+                                .WorkingMode(WorkingMode.ViewerOnly)
+                                .Width("100%")
+                                .Height("100%")
+        )
+    </div>
+    <!-- Attach the Dashboard's scripts. -->
+    @Html.DevExpress().Scripts()
+</body>
+</html>

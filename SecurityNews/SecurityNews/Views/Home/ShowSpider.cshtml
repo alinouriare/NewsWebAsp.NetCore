@@ -1,0 +1,42 @@
+﻿@model SecurityNews.Models.SpiderModel.NewsSpider
+<!--Start Menu-->
+@Html.Partial("_menuPartial")
+<!--End Menu-->
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray; padding-bottom:150px; padding-top:150px;">
+    <div class="panel panel-primary col-md-10  col-md-offset-1" style="margin-top:25px;  margin-bottom:25px;">
+        <article class="no-gutter  separator-left" style="direction:ltr !important;">
+            <div class="clearfix"></div>
+            <header>
+                @*<h1 style="font-size:16px; margin:10px; font-weight:bold;">
+                    @Model.Titel
+                </h1>*@
+            </header>
+            <main class="content  ">
+
+                <div>
+
+                    @Html.Raw(Model.Content)
+                </div>
+
+
+
+
+
+
+
+
+            </main>
+
+        </article>
+    </div>
+</div>
+<div class="container-fluid" style="  position:fixed;
+   left:0px;
+   bottom:0px;
+   height:95px;
+   width:100%;">
+    <!--start footer-->
+    @Html.Partial("_footerPartial")
+    <!--end footer-->
+</div>
